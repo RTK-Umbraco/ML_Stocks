@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "ML_Stocks": {
+      "commandName": "Project"
+    },
+    "Train": {
+      "commandName": "Project",
+      "commandLineArgs": "train ..\\..\\..\\Data\\stock.csv"
+    },
+    "Predict": {
+      "commandName": "Project",
+      "commandLineArgs": "predict ..\\..\\..\\Data\\input.json"
+    }
+  }
+}
