@@ -2,9 +2,14 @@
 
 namespace ML_Stocks.ML.Objects
 {
-    public class StockHistoryPrediction
+    public class StockPrediction
     {
-        [ColumnName("StockPrediction")]
+        public float[] Forecast { get; set; }
+
+        public float[] LowerBound { get; set; }
+
+        public float[] UpperBound { get; set; }
+
         public float Date { get; set; }
         public float Close { get; set; }
 

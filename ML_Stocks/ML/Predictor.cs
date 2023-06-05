@@ -2,6 +2,8 @@
 using ML_Stocks.ML.Base;
 using ML_Stocks.ML.Objects;
 using Newtonsoft.Json;
+using Microsoft.ML.Transforms.TimeSeries;
+using ML_Stocks.Common;
 
 namespace ML_Stocks.ML
 {
@@ -9,24 +11,25 @@ namespace ML_Stocks.ML
     {
         public void Predict(string inputDataFile)
         {
-            if (!File.Exists(inputDataFile))
-            {
-                Console.WriteLine($"Failed to find input data at {inputDataFile}");
-                return;
-            }
+
+            DoesModelFileNameExist();
+
+            DoesInputDataFileExist(inputDataFile);
 
             var mlModel = LoadMLModel();
 
-            var predictionEngine = MlContext.Model.CreatePredictionEngine<StockHistory, StockHistoryPrediction>(mlModel);
+            var predictionEngine = mlModel.CreateTimeSeriesEngine<Stock, StockPrediction>(MlContext);
 
-            //Maybe remove json since we dont want to predict ourself
             var json = File.ReadAllText(inputDataFile);
 
-            var prediction = predictionEngine.Predict(JsonConvert.DeserializeObject<StockHistory>(json));
+            var stockPrice = JsonConvert.DeserializeObject<Stock>(json);
 
-            Console.WriteLine($"Based on input json:{Environment.NewLine}" +
-                              $"{json}{Environment.NewLine}" +
-                              $"The closing price of is predicted to '{prediction.Close:#.##}' on date: '{DateTime.Today.AddDays(1)}'");
+            var prediction = predictionEngine.Predict(stockPrice, null, 0.8f);
+
+            Console.WriteLine($"Date: {stockPrice.Date}");
+            Console.WriteLine($"Given a stock price of ${stockPrice.Close}, the next closing price are predicted to be: '{string.Join(", ", prediction.Forecast)}' on the date: {DateTime.Now.AddDays(1).ToString("MM/dd/yyyy")}");
+            Console.WriteLine($"Lower confidence: {string.Join(", ", prediction.LowerBound)}");
+            Console.WriteLine($"Upper confidence: {string.Join(", ", prediction.UpperBound)}");
         }
 
         private ITransformer LoadMLModel()
