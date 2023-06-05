@@ -25,7 +25,8 @@ namespace ML_Stocks.ML
 
             var prediction = predictionEngine.Predict(stockPrice);
 
-            Console.WriteLine($"Date: {stockPrice.Date}");
+            //Console.WriteLine($"Date: {stockPrice.Date}");
+            //Console.WriteLine($"Open: {stockPrice.Open}");
             Console.WriteLine($"Given a stock price of ${stockPrice.Close}, the next closing price are predicted to be: '{string.Join(", ", prediction.Forecast)}' on the date: {DateTime.Now.AddDays(1).ToString("MM/dd/yyyy")}");
             Console.WriteLine($"Lower confidence: {string.Join(", ", prediction.LowerBound)}");
             Console.WriteLine($"Upper confidence: {string.Join(", ", prediction.UpperBound)}");

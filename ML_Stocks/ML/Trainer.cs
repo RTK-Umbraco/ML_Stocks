@@ -22,7 +22,7 @@ namespace ML_Stocks.ML
 
             var dataProcessPipeline = MlContext.Forecasting.ForecastBySsa(
                 outputColumnName: nameof(StockPrediction.Forecast),
-                inputColumnName: nameof(Stock.Close),
+                inputColumnName: nameof(Stock.Open),
                 windowSize: 7,
                 seriesLength: 30,
                 trainSize: 24,
