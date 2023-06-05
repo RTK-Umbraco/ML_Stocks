@@ -20,7 +20,6 @@ namespace ML_Stocks.ML
 
             var trainingDataView = MlContext.Data.LoadFromTextFile<Stock>(trainingFileName, ',', hasHeader: true);
 
-
             var dataProcessPipeline = MlContext.Forecasting.ForecastBySsa(
                 outputColumnName: nameof(StockPrediction.Forecast),
                 inputColumnName: nameof(Stock.Close),

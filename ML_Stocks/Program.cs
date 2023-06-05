@@ -6,6 +6,10 @@ namespace ML_Stocks
     {
         static void Main(string[] args)
         {
+
+            //HVad er funktionaliteten
+            //Klasse diagram
+            //Hvilken model vi bruger(træner)
             switch (args[0])
             {
                 case "train":

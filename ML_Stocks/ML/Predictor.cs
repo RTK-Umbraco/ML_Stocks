@@ -11,7 +11,6 @@ namespace ML_Stocks.ML
     {
         public void Predict(string inputDataFile)
         {
-
             DoesModelFileNameExist();
 
             DoesInputDataFileExist(inputDataFile);
@@ -24,7 +23,7 @@ namespace ML_Stocks.ML
 
             var stockPrice = JsonConvert.DeserializeObject<Stock>(json);
 
-            var prediction = predictionEngine.Predict(stockPrice, null, 0.8f);
+            var prediction = predictionEngine.Predict(stockPrice);
 
             Console.WriteLine($"Date: {stockPrice.Date}");
             Console.WriteLine($"Given a stock price of ${stockPrice.Close}, the next closing price are predicted to be: '{string.Join(", ", prediction.Forecast)}' on the date: {DateTime.Now.AddDays(1).ToString("MM/dd/yyyy")}");

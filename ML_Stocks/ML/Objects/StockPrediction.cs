@@ -1,6 +1,4 @@
-﻿using Microsoft.ML.Data;
-
-namespace ML_Stocks.ML.Objects
+﻿namespace ML_Stocks.ML.Objects
 {
     public class StockPrediction
     {
