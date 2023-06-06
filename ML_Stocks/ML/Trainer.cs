@@ -18,7 +18,9 @@ namespace ML_Stocks.ML
 
                 FileHelper.ValidateFileExists(trainingFileName);
 
-                var trainingDataView = MlContext.Data.LoadFromTextFile<Stock>(trainingFileName, ',', hasHeader: true);
+                var separator = SeparatorHelper.DetermineSeparator(trainingFileName);
+
+                var trainingDataView = MlContext.Data.LoadFromTextFile<Stock>(trainingFileName, separator, hasHeader: true);
 
                 var dataProcessPipeline = MlContext.Forecasting.ForecastBySsa(
                     outputColumnName: nameof(StockPrediction.ForecastedClose),

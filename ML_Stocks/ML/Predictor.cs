@@ -5,7 +5,6 @@ using Microsoft.ML.Transforms.TimeSeries;
 using ML_Stocks.Common;
 using ML_Stocks.ML.Exceptions;
 using ML_Stocks.Helpers;
-using Microsoft.Extensions.Logging;
 
 namespace ML_Stocks.ML
 {

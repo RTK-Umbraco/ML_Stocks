@@ -1,4 +1,5 @@
-﻿using ML_Stocks.ML.Objects;
+﻿using ML_Stocks.Helpers;
+using ML_Stocks.ML.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace ML_Stocks.ML
             var lines = File.ReadAllLines(filePath);
 
             // Determine the separator used in the CSV file
-            var separator = DetermineSeparator(lines[0]);
+            var separator = SeparatorHelper.DetermineSeparator(lines[0]);
 
             // Extract headers and remove unwanted column names
             var headers = lines[0].Split(separator);
@@ -68,9 +69,6 @@ namespace ML_Stocks.ML
             }
         }
 
-        private char DetermineSeparator(string headerRow)
-        {
-            return headerRow.Contains(',') ? ',' : ';';
-        }
+        
     }
 }
