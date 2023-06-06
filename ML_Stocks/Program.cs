@@ -17,6 +17,9 @@ namespace ML_Stocks
                 case "predict":
                     new Predictor().Predict(args[1]);
                     break;
+                case "extract":
+                    new FeatureExtractor().FilterAndSaveCSV(args[1]);
+                    break;
                 default:
                     Console.WriteLine($"{args[0]} is an invalid option");
                     break;

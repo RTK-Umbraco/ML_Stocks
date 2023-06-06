@@ -10,6 +10,10 @@
     "Predict": {
       "commandName": "Project",
       "commandLineArgs": "predict ..\\..\\..\\Data\\input.json"
+    },
+    "Extract": {
+      "commandName": "Project",
+      "commandLineArgs": "extract ..\\..\\..\\Data\\stock.csv"
     }
   }
 }
