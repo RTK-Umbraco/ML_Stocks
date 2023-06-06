@@ -4,7 +4,8 @@ namespace ML_Stocks.ML.Objects
 {
     public class StockPrediction
     {
-        public float[] Forecast { get; set; }
+        //[ColumnName("ForecastedClose")]
+        public float[] ForecastedClose { get; set; }
 
         public float[] LowerBound { get; set; }
 

@@ -3,10 +3,8 @@ using ML_Stocks.Common;
 using ML_Stocks.ML.Base;
 using ML_Stocks.ML.Objects;
 using Microsoft.ML.Transforms.TimeSeries;
-using Microsoft.ML.Data;
-using System.Data;
-using System.Reflection;
-
+using ML_Stocks.ML.Exceptions;
+using ML_Stocks.Helpers;
 
 namespace ML_Stocks.ML
 {
@@ -14,31 +12,38 @@ namespace ML_Stocks.ML
     {
         public void Train(string trainingFileName)
         {
-            DoesModelFileNameExist();
+            try
+            {
+                FileHelper.ValidateFileExists(Constants.MODEL_FILENAME);
 
-            DoesTrainingFileNameExist(trainingFileName);
+                FileHelper.ValidateFileExists(trainingFileName);
 
-            var trainingDataView = MlContext.Data.LoadFromTextFile<Stock>(trainingFileName, ',', hasHeader: true);
+                var trainingDataView = MlContext.Data.LoadFromTextFile<Stock>(trainingFileName, ',', hasHeader: true);
 
-            var dataProcessPipeline = MlContext.Forecasting.ForecastBySsa(
-                outputColumnName: nameof(StockPrediction.Forecast),
-                inputColumnName: nameof(Stock.Open),
-                windowSize: 7,
-                seriesLength: 30,
-                trainSize: 24,
-                horizon: 1,
-                confidenceLevel: 0.95f,
-                confidenceLowerBoundColumn: nameof(StockPrediction.LowerBound),
-                confidenceUpperBoundColumn: nameof(StockPrediction.UpperBound));
+                var dataProcessPipeline = MlContext.Forecasting.ForecastBySsa(
+                    outputColumnName: nameof(StockPrediction.ForecastedClose),
+                    //Inputcolumn determines the data being machined learned
+                    inputColumnName: nameof(Stock.Close),
+                    windowSize: 3,
+                    seriesLength: 250,
+                    trainSize: 20,
+                    horizon: 1,
+                    confidenceLevel: 0.95f,
+                    confidenceLowerBoundColumn: nameof(StockPrediction.LowerBound),
+                    confidenceUpperBoundColumn: nameof(StockPrediction.UpperBound));
 
-            //var customTransformer = MlContext.Transforms.CustomMapping(parseDateTime, null).Fit(trainingDataView);
-            var transformer = dataProcessPipeline.Fit(trainingDataView);
+                var transformer = dataProcessPipeline.Fit(trainingDataView);
 
-            var forecastEngine = transformer.CreateTimeSeriesEngine<Stock, StockPrediction>(MlContext);
+                var forecastEngine = transformer.CreateTimeSeriesEngine<Stock, StockPrediction>(MlContext);
 
-            forecastEngine.CheckPoint(MlContext, Constants.MODEL_FILENAME);
+                forecastEngine.CheckPoint(MlContext, Constants.MODEL_FILENAME);
 
-            Console.WriteLine($"Wrote model to {Constants.MODEL_FILENAME}");
+                Console.WriteLine($"Wrote model to {Constants.MODEL_FILENAME}");
+            }
+            catch (Exception exception)
+            {
+                throw new TrainerExpcetion("An error occurred while training", exception);
+            }
         }
     }
 }

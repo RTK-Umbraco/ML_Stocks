@@ -1,9 +1,11 @@
 ﻿using Microsoft.ML;
 using ML_Stocks.ML.Base;
 using ML_Stocks.ML.Objects;
-using Newtonsoft.Json;
 using Microsoft.ML.Transforms.TimeSeries;
 using ML_Stocks.Common;
+using ML_Stocks.ML.Exceptions;
+using ML_Stocks.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace ML_Stocks.ML
 {
@@ -11,25 +13,39 @@ namespace ML_Stocks.ML
     {
         public void Predict(string inputDataFile)
         {
-            DoesModelFileNameExist();
+            try
+            {
+                FileHelper.ValidateFileExists(Constants.MODEL_FILENAME);
 
-            DoesInputDataFileExist(inputDataFile);
+                FileHelper.ValidateFileExists(inputDataFile);
 
-            var mlModel = LoadMLModel();
 
-            var predictionEngine = mlModel.CreateTimeSeriesEngine<Stock, StockPrediction>(MlContext);
+                var mlModel = LoadMLModel();
 
-            var json = File.ReadAllText(inputDataFile);
+                var predictionEngine = mlModel.CreateTimeSeriesEngine<Stock, StockPrediction>(MlContext);
 
-            var stockPrice = JsonConvert.DeserializeObject<Stock>(json);
+                var json = File.ReadAllText(inputDataFile);
 
-            var prediction = predictionEngine.Predict(stockPrice);
+                var stock = JsonHelper.DeserializeJson<Stock>(json);
 
-            //Console.WriteLine($"Date: {stockPrice.Date}");
-            //Console.WriteLine($"Open: {stockPrice.Open}");
-            Console.WriteLine($"Given a stock price of ${stockPrice.Close}, the next closing price are predicted to be: '{string.Join(", ", prediction.Forecast)}' on the date: {DateTime.Now.AddDays(1).ToString("MM/dd/yyyy")}");
-            Console.WriteLine($"Lower confidence: {string.Join(", ", prediction.LowerBound)}");
-            Console.WriteLine($"Upper confidence: {string.Join(", ", prediction.UpperBound)}");
+                var prediction = predictionEngine.Predict(stock);
+
+                Console.WriteLine($"Given a stock price of ${stock.Close}, the next closing price are predicted to be: '{string.Join(", ", prediction.ForecastedClose)}' on the date: {stock.Date.ToString("MM/dd/yyyy")}");
+                Console.WriteLine($"Lower confidence: {string.Join(", ", prediction.LowerBound)}");
+                Console.WriteLine($"Upper confidence: {string.Join(", ", prediction.UpperBound)}");
+            }
+            catch (NullReferenceException nullReferenceException)
+            {
+                throw new PredictorExpcetion("A null reference exception occurred.", nullReferenceException);
+            }
+            catch (FileNotFoundException fileNotFoundException)
+            {
+                throw new PredictorExpcetion("An error occurred while fetching the file.", fileNotFoundException);
+            }
+            catch (Exception exception)
+            {
+                throw new PredictorExpcetion("An error occurred while predicting", exception);
+            }
         }
 
         private ITransformer LoadMLModel()
@@ -40,10 +56,10 @@ namespace ML_Stocks.ML
             {
                 mlModel = MlContext.Model.Load(stream, out _);
             }
+
             if (mlModel == null)
             {
-                //Throw exceptions
-                Console.WriteLine("Failed to load model");
+                throw new NullReferenceException("Failed to load model");
             }
 
             return mlModel;
