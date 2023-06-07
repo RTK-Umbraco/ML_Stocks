@@ -1,9 +1,10 @@
 ﻿using ML_Stocks.Helpers;
+using ML_Stocks.ML.Interfaces;
 using ML_Stocks.ML.Objects;
 
 namespace ML_Stocks.ML
 {
-    public class FeatureExtractor
+    public class FeatureExtractor : IFeatureExtractor
     {
         public void FilterAndSaveCSV(string filePath)
         {

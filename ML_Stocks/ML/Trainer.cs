@@ -5,10 +5,11 @@ using ML_Stocks.ML.Objects;
 using Microsoft.ML.Transforms.TimeSeries;
 using ML_Stocks.ML.Exceptions;
 using ML_Stocks.Helpers;
+using ML_Stocks.ML.Interfaces;
 
 namespace ML_Stocks.ML
 {
-    public class Trainer : BaseML
+    public class Trainer : BaseML, ITrainer
     {
         public void Train(string trainingFileName)
         {

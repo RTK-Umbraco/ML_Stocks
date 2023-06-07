@@ -1,4 +1,5 @@
 ﻿using ML_Stocks.ML;
+using ML_Stocks.ML.Interfaces;
 
 namespace ML_Stocks
 {
@@ -12,13 +13,18 @@ namespace ML_Stocks
             switch (args[0])
             {
                 case "train":
+                    ITrainer trainer = new Trainer();
+                    trainer.Train(args[1]);
+
                     new Trainer().Train(args[1]);
                     break;
                 case "predict":
-                    new Predictor().Predict(args[1]);
+                    IPredictor predictor = new Predictor();
+                    predictor.Predict(args[1]);
                     break;
                 case "extract":
-                    new FeatureExtractor().FilterAndSaveCSV(args[1]);
+                    IFeatureExtractor featureExtractor = new FeatureExtractor();
+                    featureExtractor.FilterAndSaveCSV(args[1]);
                     break;
                 default:
                     Console.WriteLine($"{args[0]} is an invalid option");

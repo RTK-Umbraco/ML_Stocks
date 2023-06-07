@@ -5,10 +5,11 @@ using Microsoft.ML.Transforms.TimeSeries;
 using ML_Stocks.Common;
 using ML_Stocks.ML.Exceptions;
 using ML_Stocks.Helpers;
+using ML_Stocks.ML.Interfaces;
 
 namespace ML_Stocks.ML
 {
-    public class Predictor : BaseML
+    public class Predictor : BaseML, IPredictor
     {
         public void Predict(string inputDataFile)
         {
