@@ -1,6 +1,5 @@
 ﻿using ML_Stocks.Common;
 using Microsoft.ML;
-using ML_Stocks.ML.Exceptions;
 
 namespace ML_Stocks.ML.Base
 {

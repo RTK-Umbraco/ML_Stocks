@@ -1,10 +1,5 @@
 ﻿using ML_Stocks.Helpers;
 using ML_Stocks.ML.Objects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ML_Stocks.ML
 {
@@ -28,10 +23,11 @@ namespace ML_Stocks.ML
                 header != StockColumns.Volume);
 
             // Create a list to store the filtered rows
-            var filteredRows = new List<string>();
-
-            // Add the filtered headers to the list of rows
-            filteredRows.Add(string.Join(separator, filteredHeaders));
+            var filteredRows = new List<string>
+            {
+                // Add the filtered headers to the list of rows
+                string.Join(separator, filteredHeaders)
+            };
 
             // Iterate through the remaining lines and filter the columns
             for (int i = 1; i < lines.Length; i++)
@@ -44,10 +40,7 @@ namespace ML_Stocks.ML
              index != Array.IndexOf(headers, StockColumns.Low) &&
              index != Array.IndexOf(headers, StockColumns.High) &&
              index != Array.IndexOf(headers, StockColumns.AdjClose) &&
-             index != Array.IndexOf(headers, StockColumns.Volume))
-             .Select((column, index) =>
-                 index == Array.IndexOf(headers, StockColumns.Close) ? FormatCloseValue(column) : column);
-
+             index != Array.IndexOf(headers, StockColumns.Volume));
 
                 // Add the filtered row to the list
                 filteredRows.Add(string.Join(separator, filteredRow));
@@ -56,19 +49,5 @@ namespace ML_Stocks.ML
             // Save the filtered data back to the CSV file
             File.WriteAllLines(filePath, filteredRows);
         }
-
-        private string FormatCloseValue(string value)
-        {
-            if (decimal.TryParse(value, out decimal closeValue))
-            {
-                return closeValue.ToString("0.###");
-            }
-            else
-            {
-                return value;
-            }
-        }
-
-        
     }
 }

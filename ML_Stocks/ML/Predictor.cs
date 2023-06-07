@@ -18,7 +18,6 @@ namespace ML_Stocks.ML
 
                 FileHelper.ValidateFileExists(inputDataFile);
 
-
                 var mlModel = LoadMLModel();
 
                 var predictionEngine = mlModel.CreateTimeSeriesEngine<Stock, StockPrediction>(MlContext);
