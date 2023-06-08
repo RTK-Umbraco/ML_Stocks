@@ -7,16 +7,15 @@ namespace ML_Stocks
     {
         static void Main(string[] args)
         {
-            //Hvad er funktionaliteten
-            //Klasse diagram
-            //Hvilken model vi bruger(træner)
+
+            //Netflix Given a stock price of $399.76, the next closing price are predicted to be: '395.79114' on the date: 08/06/2023
+            //Tesla Given a stock price of $224.57, the next closing price are predicted to be: '231.60175' on the date: 08/06/2023
+
             switch (args[0])
             {
                 case "train":
                     ITrainer trainer = new Trainer();
                     trainer.Train(args[1]);
-
-                    new Trainer().Train(args[1]);
                     break;
                 case "predict":
                     IPredictor predictor = new Predictor();
