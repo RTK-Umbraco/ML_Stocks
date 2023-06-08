@@ -19,7 +19,9 @@ namespace ML_Stocks.ML
 
                 FileHelper.ValidateFileExists(trainingFileName);
 
-                var separator = SeparatorHelper.DetermineSeparator(trainingFileName);
+                var lines = File.ReadAllLines(trainingFileName);
+
+                var separator = SeparatorHelper.DetermineSeparator(lines);
 
                 var trainingDataView = MlContext.Data.LoadFromTextFile<Stock>(trainingFileName, separator, hasHeader: true);
 
@@ -27,9 +29,9 @@ namespace ML_Stocks.ML
                     outputColumnName: nameof(StockPrediction.ForecastedClose),
                     //Inputcolumn determines the data being machined learned
                     inputColumnName: nameof(Stock.Close),
-                    windowSize: 3,
+                    windowSize: 10,
                     seriesLength: 250,
-                    trainSize: 20,
+                    trainSize: 250,
                     horizon: 1,
                     confidenceLevel: 0.95f,
                     confidenceLowerBoundColumn: nameof(StockPrediction.LowerBound),

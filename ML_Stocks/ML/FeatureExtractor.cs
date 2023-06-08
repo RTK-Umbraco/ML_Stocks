@@ -12,7 +12,7 @@ namespace ML_Stocks.ML
             var lines = File.ReadAllLines(filePath);
 
             // Determine the separator used in the CSV file
-            var separator = SeparatorHelper.DetermineSeparator(lines[0]);
+            var separator = SeparatorHelper.DetermineSeparator(lines);
 
             // Extract headers and remove unwanted column names
             var headers = lines[0].Split(separator);
@@ -49,6 +49,8 @@ namespace ML_Stocks.ML
 
             // Save the filtered data back to the CSV file
             File.WriteAllLines(filePath, filteredRows);
+
+            Console.WriteLine($"Csv file as been extracted");
         }
     }
 }
